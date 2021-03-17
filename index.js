@@ -388,274 +388,274 @@ function speak_impl(voice_Connection, mapKey) {
     })
 }
 
-// function process_commands_query(query, mapKey, userid) {
-//     if (!query || !query.length)
-//         return;
+function process_commands_query(query, mapKey, userid) {
+    if (!query || !query.length)
+        return;
 
-//     let out = null;
+    let out = null;
 
-//     const regex = /^music ([a-zA-Z]+)(.+?)?$/;
-//     const m = query.toLowerCase().match(regex);
-//     if (m && m.length) {
-//         const cmd = (m[1]||'').trim();
-//         const args = (m[2]||'').trim();
+    const regex = /^music ([a-zA-Z]+)(.+?)?$/;
+    const m = query.toLowerCase().match(regex);
+    if (m && m.length) {
+        const cmd = (m[1]||'').trim();
+        const args = (m[2]||'').trim();
 
-//         switch(cmd) {
-//             case 'help':
-//                 out = _CMD_HELP;
-//                 break;
-//             case 'skip':
-//                 out = _CMD_SKIP;
-//                 break;
-//             case 'shuffle':
-//                 out = _CMD_SHUFFLE;
-//                 break;
-//             case 'genres':
-//                 out = _CMD_GENRES;
-//                 break;
-//             case 'pause':
-//                 out = _CMD_PAUSE;
-//                 break;
-//             case 'resume':
-//                 out = _CMD_RESUME;
-//                 break;
-//             case 'clear':
-//                 if (args == 'list')
-//                     out = _CMD_CLEAR;
-//                 break;
-//             case 'list':
-//                 out = _CMD_QUEUE;
-//                 break;
-//             case 'hello':
-//                 out = 'hello back =)'
-//                 break;
-//             case 'favorites':
-//                 out = _CMD_FAVORITES;
-//                 break;
-//             case 'set':
-//                 switch (args) {
-//                     case 'favorite':
-//                     case 'favorites':
-//                         out = _CMD_FAVORITE;
-//                         break;
-//                 }
-//                 break;
-//             case 'play':
-//             case 'player':
-//                 switch(args) {
-//                     case 'random':
-//                         out = _CMD_RANDOM;
-//                         break;
-//                     case 'favorite':
-//                     case 'favorites':
-//                         out = _CMD_PLAY + ' ' + 'favorites';
-//                         break;
-//                     default:
-//                         for (let k of Object.keys(GENRES)) {
-//                             if (GENRES[k].includes(args)) {
-//                                 out = _CMD_GENRE + ' ' + k;
-//                             }
-//                         }
-//                         if (out == null) {
-//                             out = _CMD_PLAY + ' ' + args;
-//                         }
-//                 }
-//                 break;
-//         }
-//         if (out == null)
-//             out = '<bad command: ' + query + '>';
-//     }
-//     if (out != null && out.length) {
-//         // out = '<@' + userid + '>, ' + out;
-//         console.log('text_Channel out: ' + out)
-//         const val = guildMap.get(mapKey);
-//         val.text_Channel.send(out)
-//     }
-// }
-
-async function music_message(message, mapKey) {
-    let replymsgs = [];
-    const messes = message.content.split('\n');
-    for (let mess of messes) {
-        const args = mess.split(' ');
-
-        if (args[0] == _CMD_PLAY && args.length) {
-            const qry = args.slice(1).join(' ');
-            if (qry == 'favorites') {
-                // play guild's favorites
-                if (mapKey in GUILD_FAVORITES) {
-                    let arr = GUILD_FAVORITES[mapKey];
-                    if (arr.length) {
-                        for (let item of arr)     {
-                            addToQueue(item, mapKey)
+        switch(cmd) {
+            case 'help':
+                out = _CMD_HELP;
+                break;
+            case 'skip':
+                out = _CMD_SKIP;
+                break;
+            case 'shuffle':
+                out = _CMD_SHUFFLE;
+                break;
+            case 'genres':
+                out = _CMD_GENRES;
+                break;
+            case 'pause':
+                out = _CMD_PAUSE;
+                break;
+            case 'resume':
+                out = _CMD_RESUME;
+                break;
+            case 'clear':
+                if (args == 'list')
+                    out = _CMD_CLEAR;
+                break;
+            case 'list':
+                out = _CMD_QUEUE;
+                break;
+            case 'hello':
+                out = 'hello back =)'
+                break;
+            case 'favorites':
+                out = _CMD_FAVORITES;
+                break;
+            case 'set':
+                switch (args) {
+                    case 'favorite':
+                    case 'favorites':
+                        out = _CMD_FAVORITE;
+                        break;
+                }
+                break;
+            case 'play':
+            case 'player':
+                switch(args) {
+                    case 'random':
+                        out = _CMD_RANDOM;
+                        break;
+                    case 'favorite':
+                    case 'favorites':
+                        out = _CMD_PLAY + ' ' + 'favorites';
+                        break;
+                    default:
+                        for (let k of Object.keys(GENRES)) {
+                            if (GENRES[k].includes(args)) {
+                                out = _CMD_GENRE + ' ' + k;
+                            }
                         }
-                        message.react(EMOJI_GREEN_CIRCLE)
-                    } else {
-                        message.channel.send('No favorites yet.')
-                    }
-                } else {
-                    message.channel.send('No favorites yet.')
+                        if (out == null) {
+                            out = _CMD_PLAY + ' ' + args;
+                        }
                 }
-            }
-            else if (isSpotify(qry)) {
-                try {
-                    const arr = await spotify_tracks_from_playlist(qry);
-                    console.log(arr.length + ' spotify items from playlist')
-                    for (let item of arr)
-                        addToQueue(item, mapKey);
-                    message.react(EMOJI_GREEN_CIRCLE)
-                } catch(e) {
-                    console.log('music_message 464:' + e)
-                    message.channel.send('Failed processing spotify link: ' + qry);
-                }
-            } else {
-
-                if (isYoutube(qry) && isYoutubePlaylist(qry)) {
-                    try {
-                        const arr = await youtube_tracks_from_playlist(qry);
-                        for (let item of arr)
-                            addToQueue(item, mapKey)
-                        message.react(EMOJI_GREEN_CIRCLE)
-                    } catch (e) {
-                        console.log('music_message 476:' + e)
-                        message.channel.send('Failed to process playlist: ' + qry);
-                    }
-                } else {
-                    try {
-                        addToQueue(qry, mapKey);
-                        message.react(EMOJI_GREEN_CIRCLE)
-                    } catch (e) {
-                        console.log('music_message 484:' + e)
-                        message.channel.send('Failed to find video for (try again): ' + qry);
-                    }
-                }
-            }
-        } else if (args[0] == _CMD_SKIP) {
-
-            skipMusic(mapKey, ()=>{
-                message.react(EMOJI_GREEN_CIRCLE)
-            }, (msg)=>{
-                if (msg && msg.length) message.channel.send(msg);
-            })
-
-        } else if (args[0] == _CMD_PAUSE) {
-
-            pauseMusic(mapKey, ()=>{
-                message.react(EMOJI_GREEN_CIRCLE)
-            }, (msg)=>{
-                if (msg && msg.length) message.channel.send(msg);
-            })
-
-        } else if (args[0] == _CMD_RESUME) {
-
-            resumeMusic(mapKey, ()=>{
-                message.react(EMOJI_GREEN_CIRCLE)
-            }, (msg)=>{
-                if (msg && msg.length) message.channel.send(msg);
-            })
-
-        } else if (args[0] == _CMD_SHUFFLE) {
-
-            shuffleMusic(mapKey, ()=>{
-                message.react(EMOJI_GREEN_CIRCLE)
-            }, (msg)=>{
-                if (msg && msg.length) message.channel.send(msg);
-            })
-
-        } else if (args[0] == _CMD_CLEAR) {
-
-            clearQueue(mapKey, ()=>{
-                message.react(EMOJI_GREEN_CIRCLE)
-            }, (msg)=>{
-                if (msg && msg.length) message.channel.send(msg);
-            })
-
-        } else if (args[0] == _CMD_QUEUE) {
-
-            const chunks = message_chunking(getQueueString(mapKey), DISCORD_MSG_LIMIT);
-            for (let chunk of chunks) {
-                console.log(chunk.length)
-                message.channel.send(chunk);
-            }
-            message.react(EMOJI_GREEN_CIRCLE)
-
-        } else if (args[0] == _CMD_RANDOM) {
-
-            let arr = await spotify_new_releases();
-            if (arr.length) {
-                arr = shuffle(arr);
-                // let item = arr[Math.floor(Math.random() * arr.length)];
-                for (let item of arr)
-                    addToQueue(item, mapKey);
-                message.react(EMOJI_GREEN_CIRCLE)
-            } else {
-                message.channel.send('no results for random');
-            }
-
-        } else if (args[0] == _CMD_GENRES) {
-
-            let out = "------------ genres ------------\n";
-            for (let g of Object.keys(GENRES)) {
-                out += g + '\n'
-            }
-            out += "--------------------------------\n";
-            const chunks = message_chunking(out, DISCORD_MSG_LIMIT);
-            for (let chunk of chunks)
-                message.channel.send(chunk);
-
-        } else if (args[0] == _CMD_GENRE) {
-
-            const genre = args.slice(1).join(' ').trim();
-            let arr = await spotify_recommended(genre);
-            if (arr.length) {
-                arr = shuffle(arr);
-                // let item = arr[Math.floor(Math.random() * arr.length)];
-                for (let item of arr)
-                    addToQueue(item, mapKey);
-                message.react(EMOJI_GREEN_CIRCLE)
-            } else {
-                message.channel.send('no results for genre: ' + genre);
-            }
-
-        } else if (args[0] == _CMD_FAVORITES) {
-            const favs = getFavoritesString(mapKey);
-            if (!(mapKey in GUILD_FAVORITES) || !GUILD_FAVORITES[mapKey].length)
-                message.channel.send('No favorites to play.')
-            else {
-                const chunks = message_chunking(favs, DISCORD_MSG_LIMIT);
-                for (let chunk of chunks)
-                    message.channel.send(chunk);
-                message.react(EMOJI_GREEN_CIRCLE)
-            }
-
-        } else if (args[0] == _CMD_FAVORITE) {
-
-            setAsFavorite(mapKey, ()=>{
-                message.react(EMOJI_GREEN_CIRCLE)
-            }, (msg)=> {
-                if (msg && msg.length) message.channel.send(msg);
-            })
-
-        }  else if (args[0] == _CMD_UNFAVORITE) {
-
-            const qry = args.slice(1).join(' ');
-            unFavorite(qry, mapKey, ()=>{
-                message.react(EMOJI_GREEN_CIRCLE)
-            }, (msg)=>{
-                if (msg && msg.length) message.channel.send(msg);
-            })
-
-        } 
-
+                break;
+        }
+        if (out == null)
+            out = '<bad command: ' + query + '>';
     }
-    
-    queueTryPlayNext(mapKey, (title)=>{
-        message.react(EMOJI_GREEN_CIRCLE);
-        message.channel.send('Now playing: **' + title + '**')
-    }, (msg)=>{
-        if (msg && msg.length) message.channel.send(msg);
-    });
+    if (out != null && out.length) {
+        // out = '<@' + userid + '>, ' + out;
+        console.log('text_Channel out: ' + out)
+        const val = guildMap.get(mapKey);
+        val.text_Channel.send(out)
+    }
 }
+
+// async function music_message(message, mapKey) {
+//     let replymsgs = [];
+//     const messes = message.content.split('\n');
+//     for (let mess of messes) {
+//         const args = mess.split(' ');
+
+//         if (args[0] == _CMD_PLAY && args.length) {
+//             const qry = args.slice(1).join(' ');
+//             if (qry == 'favorites') {
+//                 // play guild's favorites
+//                 if (mapKey in GUILD_FAVORITES) {
+//                     let arr = GUILD_FAVORITES[mapKey];
+//                     if (arr.length) {
+//                         for (let item of arr)     {
+//                             addToQueue(item, mapKey)
+//                         }
+//                         message.react(EMOJI_GREEN_CIRCLE)
+//                     } else {
+//                         message.channel.send('No favorites yet.')
+//                     }
+//                 } else {
+//                     message.channel.send('No favorites yet.')
+//                 }
+//             }
+//             else if (isSpotify(qry)) {
+//                 try {
+//                     const arr = await spotify_tracks_from_playlist(qry);
+//                     console.log(arr.length + ' spotify items from playlist')
+//                     for (let item of arr)
+//                         addToQueue(item, mapKey);
+//                     message.react(EMOJI_GREEN_CIRCLE)
+//                 } catch(e) {
+//                     console.log('music_message 464:' + e)
+//                     message.channel.send('Failed processing spotify link: ' + qry);
+//                 }
+//             } else {
+
+//                 if (isYoutube(qry) && isYoutubePlaylist(qry)) {
+//                     try {
+//                         const arr = await youtube_tracks_from_playlist(qry);
+//                         for (let item of arr)
+//                             addToQueue(item, mapKey)
+//                         message.react(EMOJI_GREEN_CIRCLE)
+//                     } catch (e) {
+//                         console.log('music_message 476:' + e)
+//                         message.channel.send('Failed to process playlist: ' + qry);
+//                     }
+//                 } else {
+//                     try {
+//                         addToQueue(qry, mapKey);
+//                         message.react(EMOJI_GREEN_CIRCLE)
+//                     } catch (e) {
+//                         console.log('music_message 484:' + e)
+//                         message.channel.send('Failed to find video for (try again): ' + qry);
+//                     }
+//                 }
+//             }
+//         } else if (args[0] == _CMD_SKIP) {
+
+//             skipMusic(mapKey, ()=>{
+//                 message.react(EMOJI_GREEN_CIRCLE)
+//             }, (msg)=>{
+//                 if (msg && msg.length) message.channel.send(msg);
+//             })
+
+//         } else if (args[0] == _CMD_PAUSE) {
+
+//             pauseMusic(mapKey, ()=>{
+//                 message.react(EMOJI_GREEN_CIRCLE)
+//             }, (msg)=>{
+//                 if (msg && msg.length) message.channel.send(msg);
+//             })
+
+//         } else if (args[0] == _CMD_RESUME) {
+
+//             resumeMusic(mapKey, ()=>{
+//                 message.react(EMOJI_GREEN_CIRCLE)
+//             }, (msg)=>{
+//                 if (msg && msg.length) message.channel.send(msg);
+//             })
+
+//         } else if (args[0] == _CMD_SHUFFLE) {
+
+//             shuffleMusic(mapKey, ()=>{
+//                 message.react(EMOJI_GREEN_CIRCLE)
+//             }, (msg)=>{
+//                 if (msg && msg.length) message.channel.send(msg);
+//             })
+
+//         } else if (args[0] == _CMD_CLEAR) {
+
+//             clearQueue(mapKey, ()=>{
+//                 message.react(EMOJI_GREEN_CIRCLE)
+//             }, (msg)=>{
+//                 if (msg && msg.length) message.channel.send(msg);
+//             })
+
+//         } else if (args[0] == _CMD_QUEUE) {
+
+//             const chunks = message_chunking(getQueueString(mapKey), DISCORD_MSG_LIMIT);
+//             for (let chunk of chunks) {
+//                 console.log(chunk.length)
+//                 message.channel.send(chunk);
+//             }
+//             message.react(EMOJI_GREEN_CIRCLE)
+
+//         } else if (args[0] == _CMD_RANDOM) {
+
+//             let arr = await spotify_new_releases();
+//             if (arr.length) {
+//                 arr = shuffle(arr);
+//                 // let item = arr[Math.floor(Math.random() * arr.length)];
+//                 for (let item of arr)
+//                     addToQueue(item, mapKey);
+//                 message.react(EMOJI_GREEN_CIRCLE)
+//             } else {
+//                 message.channel.send('no results for random');
+//             }
+
+//         } else if (args[0] == _CMD_GENRES) {
+
+//             let out = "------------ genres ------------\n";
+//             for (let g of Object.keys(GENRES)) {
+//                 out += g + '\n'
+//             }
+//             out += "--------------------------------\n";
+//             const chunks = message_chunking(out, DISCORD_MSG_LIMIT);
+//             for (let chunk of chunks)
+//                 message.channel.send(chunk);
+
+//         } else if (args[0] == _CMD_GENRE) {
+
+//             const genre = args.slice(1).join(' ').trim();
+//             let arr = await spotify_recommended(genre);
+//             if (arr.length) {
+//                 arr = shuffle(arr);
+//                 // let item = arr[Math.floor(Math.random() * arr.length)];
+//                 for (let item of arr)
+//                     addToQueue(item, mapKey);
+//                 message.react(EMOJI_GREEN_CIRCLE)
+//             } else {
+//                 message.channel.send('no results for genre: ' + genre);
+//             }
+
+//         } else if (args[0] == _CMD_FAVORITES) {
+//             const favs = getFavoritesString(mapKey);
+//             if (!(mapKey in GUILD_FAVORITES) || !GUILD_FAVORITES[mapKey].length)
+//                 message.channel.send('No favorites to play.')
+//             else {
+//                 const chunks = message_chunking(favs, DISCORD_MSG_LIMIT);
+//                 for (let chunk of chunks)
+//                     message.channel.send(chunk);
+//                 message.react(EMOJI_GREEN_CIRCLE)
+//             }
+
+//         } else if (args[0] == _CMD_FAVORITE) {
+
+//             setAsFavorite(mapKey, ()=>{
+//                 message.react(EMOJI_GREEN_CIRCLE)
+//             }, (msg)=> {
+//                 if (msg && msg.length) message.channel.send(msg);
+//             })
+
+//         }  else if (args[0] == _CMD_UNFAVORITE) {
+
+//             const qry = args.slice(1).join(' ');
+//             unFavorite(qry, mapKey, ()=>{
+//                 message.react(EMOJI_GREEN_CIRCLE)
+//             }, (msg)=>{
+//                 if (msg && msg.length) message.channel.send(msg);
+//             })
+
+//         } 
+
+//     }
+    
+//     queueTryPlayNext(mapKey, (title)=>{
+//         message.react(EMOJI_GREEN_CIRCLE);
+//         message.channel.send('Now playing: **' + title + '**')
+//     }, (msg)=>{
+//         if (msg && msg.length) message.channel.send(msg);
+//     });
+// }
 
 let GUILD_FAVORITES = {};
 const GUILD_FAVORITES_FILE = './data/guild_favorites.json';
