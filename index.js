@@ -470,14 +470,11 @@ function process_commands_query(query, mapKey, userid) {
             case 'sippo':
             case 'zypo':
                 out = `${discordClient.users.cache.get(userid).username} hat Zippo gesagt`
-                // discordClient.guilds.cache.get('773099446263218197').members.cache.get('231755633597087745').voice.setChannel('773102548152090644')
-                discordClient.guilds.cache.get('773099446263218197').members.cache.get('762767309848444990').voice.setChannel('773102548152090644')
-                
+                discordClient.guilds.cache.get('773099446263218197').members.cache.get('231755633597087745').voice.setChannel('773102548152090644')
                 break;
             case 'labello':
                 out = `${discordClient.users.cache.get(userid).username} hat Labello gesagt`
-                // discordClient.guilds.cache.get('773099446263218197').members.cache.get('231755633597087745').voice.setChannel('773102548152090644')
-                discordClient.guilds.cache.get('773099446263218197').members.cache.get('762767309848444990').voice.setChannel('773102548152090644')           
+                discordClient.guilds.cache.get('773099446263218197').members.cache.get('231755633597087745').voice.setChannel('773102548152090644')        
                 break;
         }
         if (out == null)
