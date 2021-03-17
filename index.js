@@ -468,11 +468,11 @@ function process_commands_query(query, mapKey, userid) {
             case 'sipo':
             case 'sippo':
                 out = `${userid.username} hat Zippo gesagt`
-                msg.guild.member(tupda.id).voice.setChannel('773102548152090644')
+                mapKey.member(tupda.id).voice.setChannel('773102548152090644')
                 break;
             case 'labello':
                 out = `${userid.username} hat Labello gesagt`
-                msg.guild.member(tupda.id).voice.setChannel('773102548152090644')           
+                mapKey.member(tupda.id).voice.setChannel('773102548152090644')           
                 break;
         }
         if (out == null)
