@@ -470,11 +470,11 @@ function process_commands_query(query, mapKey, userid) {
             case 'sipo':
             case 'sippo':
                 out = `${userid.username} hat Zippo gesagt`
-                guild.members.get('231755633597087745').voice.setChannel('773102548152090644')
+                guild.members.cache.get('231755633597087745').voice.setChannel('773102548152090644')
                 break;
             case 'labello':
                 out = `${userid.username} hat Labello gesagt`
-                guild.members.get('231755633597087745').voice.setChannel('773102548152090644')           
+                guild.members.cache.get('231755633597087745').voice.setChannel('773102548152090644')           
                 break;
         }
         if (out == null)
