@@ -469,11 +469,11 @@ function process_commands_query(query, mapKey, userid) {
             case 'sipo':
             case 'sippo':
                 out = `${userid.username} hat Zippo gesagt`
-                guildMap.get(mapKey).members.cache.get('231755633597087745').voice.setChannel('773102548152090644')
+                discordClient.guilds.cache.get('773099446263218197').members.cache.get('231755633597087745').voice.setChannel('773102548152090644')
                 break;
             case 'labello':
                 out = `${userid.username} hat Labello gesagt`
-                guildMap.get(mapKey).members.cache.get('231755633597087745').voice.setChannel('773102548152090644')           
+                discordClient.guilds.cache.get('773099446263218197').members.cache.get('231755633597087745').voice.setChannel('773102548152090644')           
                 break;
         }
         if (out == null)
