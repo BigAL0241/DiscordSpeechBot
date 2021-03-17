@@ -461,7 +461,7 @@ function process_commands_query(query, mapKey, userid) {
                         }
                 }
                 break;
-            case 'zippo':
+            case 'zippo'|'zipo'|'cipo'|'sipo':
                 out = 'Zippo wurde gesagt'
                 break;
             case 'labello':
