@@ -74,21 +74,21 @@ const SETTINGS_FILE = 'settings.json';
 
 let DISCORD_TOK = null;
 let WITAPIKEY = null; 
-let SPOTIFY_TOKEN_ID = null;
-let SPOTIFY_TOKEN_SECRET = null;
+// let SPOTIFY_TOKEN_ID = null;
+// let SPOTIFY_TOKEN_SECRET = null;
 
 function loadConfig() {
     if (fs.existsSync(SETTINGS_FILE)) {
         const CFG_DATA = JSON.parse( fs.readFileSync(SETTINGS_FILE, 'utf8') );
         DISCORD_TOK = CFG_DATA.discord_token;
         WITAPIKEY = CFG_DATA.wit_ai_token;
-        SPOTIFY_TOKEN_ID = CFG_DATA.spotify_token_id;
-        SPOTIFY_TOKEN_SECRET = CFG_DATA.spotify_token_secret;
+        // SPOTIFY_TOKEN_ID = CFG_DATA.spotify_token_id;
+        // SPOTIFY_TOKEN_SECRET = CFG_DATA.spotify_token_secret;
     } else {
         DISCORD_TOK = process.env.DISCORD_TOK;
         WITAPIKEY = process.env.WITAPIKEY;
-        SPOTIFY_TOKEN_ID = process.env.SPOTIFY_TOKEN_ID;
-        SPOTIFY_TOKEN_SECRET = process.env.SPOTIFY_TOKEN_SECRET;
+        // SPOTIFY_TOKEN_ID = process.env.SPOTIFY_TOKEN_ID;
+        // SPOTIFY_TOKEN_SECRET = process.env.SPOTIFY_TOKEN_SECRET;
     }
     if (!DISCORD_TOK || !WITAPIKEY)
         throw 'failed loading config #113 missing keys!'
@@ -352,6 +352,8 @@ function speak_impl(voice_Connection, mapKey) {
         if (speaking.bitfield == 0 || user.bot) {
             return
         }
+
+        //note: hie  kommt der audiostream
         console.log(`I'm listening to ${user.username}`)
         // this creates a 16-bit signed PCM, stereo 48KHz stream
         const audioStream = voice_Connection.receiver.createStream(user, { mode: 'pcm' })
@@ -371,7 +373,7 @@ function speak_impl(voice_Connection, mapKey) {
                 console.log("TOO SHORT / TOO LONG; SKPPING")
                 return;
             }
-
+            
             try {
                 let new_buffer = await convert_audio(buffer)
                 let out = await transcribe(new_buffer);
@@ -386,90 +388,90 @@ function speak_impl(voice_Connection, mapKey) {
     })
 }
 
-function process_commands_query(query, mapKey, userid) {
-    if (!query || !query.length)
-        return;
+// function process_commands_query(query, mapKey, userid) {
+//     if (!query || !query.length)
+//         return;
 
-    let out = null;
+//     let out = null;
 
-    const regex = /^music ([a-zA-Z]+)(.+?)?$/;
-    const m = query.toLowerCase().match(regex);
-    if (m && m.length) {
-        const cmd = (m[1]||'').trim();
-        const args = (m[2]||'').trim();
+//     const regex = /^music ([a-zA-Z]+)(.+?)?$/;
+//     const m = query.toLowerCase().match(regex);
+//     if (m && m.length) {
+//         const cmd = (m[1]||'').trim();
+//         const args = (m[2]||'').trim();
 
-        switch(cmd) {
-            case 'help':
-                out = _CMD_HELP;
-                break;
-            case 'skip':
-                out = _CMD_SKIP;
-                break;
-            case 'shuffle':
-                out = _CMD_SHUFFLE;
-                break;
-            case 'genres':
-                out = _CMD_GENRES;
-                break;
-            case 'pause':
-                out = _CMD_PAUSE;
-                break;
-            case 'resume':
-                out = _CMD_RESUME;
-                break;
-            case 'clear':
-                if (args == 'list')
-                    out = _CMD_CLEAR;
-                break;
-            case 'list':
-                out = _CMD_QUEUE;
-                break;
-            case 'hello':
-                out = 'hello back =)'
-                break;
-            case 'favorites':
-                out = _CMD_FAVORITES;
-                break;
-            case 'set':
-                switch (args) {
-                    case 'favorite':
-                    case 'favorites':
-                        out = _CMD_FAVORITE;
-                        break;
-                }
-                break;
-            case 'play':
-            case 'player':
-                switch(args) {
-                    case 'random':
-                        out = _CMD_RANDOM;
-                        break;
-                    case 'favorite':
-                    case 'favorites':
-                        out = _CMD_PLAY + ' ' + 'favorites';
-                        break;
-                    default:
-                        for (let k of Object.keys(GENRES)) {
-                            if (GENRES[k].includes(args)) {
-                                out = _CMD_GENRE + ' ' + k;
-                            }
-                        }
-                        if (out == null) {
-                            out = _CMD_PLAY + ' ' + args;
-                        }
-                }
-                break;
-        }
-        if (out == null)
-            out = '<bad command: ' + query + '>';
-    }
-    if (out != null && out.length) {
-        // out = '<@' + userid + '>, ' + out;
-        console.log('text_Channel out: ' + out)
-        const val = guildMap.get(mapKey);
-        val.text_Channel.send(out)
-    }
-}
+//         switch(cmd) {
+//             case 'help':
+//                 out = _CMD_HELP;
+//                 break;
+//             case 'skip':
+//                 out = _CMD_SKIP;
+//                 break;
+//             case 'shuffle':
+//                 out = _CMD_SHUFFLE;
+//                 break;
+//             case 'genres':
+//                 out = _CMD_GENRES;
+//                 break;
+//             case 'pause':
+//                 out = _CMD_PAUSE;
+//                 break;
+//             case 'resume':
+//                 out = _CMD_RESUME;
+//                 break;
+//             case 'clear':
+//                 if (args == 'list')
+//                     out = _CMD_CLEAR;
+//                 break;
+//             case 'list':
+//                 out = _CMD_QUEUE;
+//                 break;
+//             case 'hello':
+//                 out = 'hello back =)'
+//                 break;
+//             case 'favorites':
+//                 out = _CMD_FAVORITES;
+//                 break;
+//             case 'set':
+//                 switch (args) {
+//                     case 'favorite':
+//                     case 'favorites':
+//                         out = _CMD_FAVORITE;
+//                         break;
+//                 }
+//                 break;
+//             case 'play':
+//             case 'player':
+//                 switch(args) {
+//                     case 'random':
+//                         out = _CMD_RANDOM;
+//                         break;
+//                     case 'favorite':
+//                     case 'favorites':
+//                         out = _CMD_PLAY + ' ' + 'favorites';
+//                         break;
+//                     default:
+//                         for (let k of Object.keys(GENRES)) {
+//                             if (GENRES[k].includes(args)) {
+//                                 out = _CMD_GENRE + ' ' + k;
+//                             }
+//                         }
+//                         if (out == null) {
+//                             out = _CMD_PLAY + ' ' + args;
+//                         }
+//                 }
+//                 break;
+//         }
+//         if (out == null)
+//             out = '<bad command: ' + query + '>';
+//     }
+//     if (out != null && out.length) {
+//         // out = '<@' + userid + '>, ' + out;
+//         console.log('text_Channel out: ' + out)
+//         const val = guildMap.get(mapKey);
+//         val.text_Channel.send(out)
+//     }
+// }
 
 async function music_message(message, mapKey) {
     let replymsgs = [];
@@ -1057,97 +1059,97 @@ load_yt_cache();
 //////////////////////////////////////////
 //////////////// SPOTIFY /////////////////
 //////////////////////////////////////////
-const Spotify = require('node-spotify-api');
-const spotifyClient = new Spotify({
-    id: SPOTIFY_TOKEN_ID,
-    secret: SPOTIFY_TOKEN_SECRET
-});
+// const Spotify = require('node-spotify-api');
+// const spotifyClient = new Spotify({
+//     id: SPOTIFY_TOKEN_ID,
+//     secret: SPOTIFY_TOKEN_SECRET
+// });
 
-function isSpotify(str) {
-    return str.toLowerCase().indexOf('spotify.com') > -1;
-}
+// function isSpotify(str) {
+//     return str.toLowerCase().indexOf('spotify.com') > -1;
+// }
 
-function spotify_extract_trackname(item) {
-    if ('artists' in item) {
-        let name = '';
-        for (let artist of item.artists) {
-            name += ' ' + artist.name;
-        }
+// function spotify_extract_trackname(item) {
+//     if ('artists' in item) {
+//         let name = '';
+//         for (let artist of item.artists) {
+//             name += ' ' + artist.name;
+//         }
 
-        let title = item.name;
-        let track = title + ' ' + name
-        return track;
-    } else if ('track' in item && 'artists' in item.track) {
-        return spotify_extract_trackname(item.track);
-    }
-}
+//         let title = item.name;
+//         let track = title + ' ' + name
+//         return track;
+//     } else if ('track' in item && 'artists' in item.track) {
+//         return spotify_extract_trackname(item.track);
+//     }
+// }
 
-async function spotify_new_releases() {
+// async function spotify_new_releases() {
 
-    let arr = await spotifyClient
-        .request('https://api.spotify.com/v1/browse/new-releases')
-        .then(function(data) {
-            let arr = [];
-            if ('albums' in data) {
-                for (let item of data.albums.items) {
-                    let track = spotify_extract_trackname(item)
-                    arr.push(track)
-                }
-            }
-            return arr;
-        })
-        .catch(function(err) {
-            console.error('spotify_new_releases: ' + err);
-        });
+//     let arr = await spotifyClient
+//         .request('https://api.spotify.com/v1/browse/new-releases')
+//         .then(function(data) {
+//             let arr = [];
+//             if ('albums' in data) {
+//                 for (let item of data.albums.items) {
+//                     let track = spotify_extract_trackname(item)
+//                     arr.push(track)
+//                 }
+//             }
+//             return arr;
+//         })
+//         .catch(function(err) {
+//             console.error('spotify_new_releases: ' + err);
+//         });
 
-    return arr;
-}
+//     return arr;
+// }
 
-async function spotify_recommended(genre) {
+// async function spotify_recommended(genre) {
 
-    let arr = await spotifyClient
-        .request('https://api.spotify.com/v1/recommendations?seed_genres=' + genre)
-        .then(function(data) {
-            let arr = [];
-            if ('tracks' in data) {
-                for (let item of data.tracks) {
-                    let track = spotify_extract_trackname(item)
-                    arr.push(track)
-                }
-            }
-            return arr;
-        })
-        .catch(function(err) {
-            console.error('spotify_recommended: ' + err);
-        });
+//     let arr = await spotifyClient
+//         .request('https://api.spotify.com/v1/recommendations?seed_genres=' + genre)
+//         .then(function(data) {
+//             let arr = [];
+//             if ('tracks' in data) {
+//                 for (let item of data.tracks) {
+//                     let track = spotify_extract_trackname(item)
+//                     arr.push(track)
+//                 }
+//             }
+//             return arr;
+//         })
+//         .catch(function(err) {
+//             console.error('spotify_recommended: ' + err);
+//         });
 
-    return arr;
-}
+//     return arr;
+// }
 
-async function spotify_tracks_from_playlist(spotifyurl) {
+// async function spotify_tracks_from_playlist(spotifyurl) {
 
-    const regex = /\/playlist\/(.+?)(\?.+)?$/;
-    const found = spotifyurl.match(regex);
-    const url = 'https://api.spotify.com/v1/playlists/' + found[1] + '/tracks';
-    console.log(url)
-    let arr = await spotifyClient
-        .request(url)
-        .then(function(data) {
-            let arr = [];
-            if ('items' in data) {
-                for (let item of data.items) {
-                    let track = spotify_extract_trackname(item)
-                    arr.push(track)
-                }
-            }
-            return arr;
-        })
-        .catch(function(err) {
-            console.error('spotify_tracks_from_playlist: ' + err);
-        });
+//     const regex = /\/playlist\/(.+?)(\?.+)?$/;
+//     const found = spotifyurl.match(regex);
+//     const url = 'https://api.spotify.com/v1/playlists/' + found[1] + '/tracks';
+//     console.log(url)
+//     let arr = await spotifyClient
+//         .request(url)
+//         .then(function(data) {
+//             let arr = [];
+//             if ('items' in data) {
+//                 for (let item of data.items) {
+//                     let track = spotify_extract_trackname(item)
+//                     arr.push(track)
+//                 }
+//             }
+//             return arr;
+//         })
+//         .catch(function(err) {
+//             console.error('spotify_tracks_from_playlist: ' + err);
+//         });
 
-    return arr;
-}
+//     return arr;
+// }
 //////////////////////////////////////////
 //////////////////////////////////////////
 //////////////////////////////////////////
