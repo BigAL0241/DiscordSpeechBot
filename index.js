@@ -389,7 +389,7 @@ function speak_impl(voice_Connection, mapKey) {
 }
 
 let flex_Channel = discordClient.channels.fetch(773102548152090644);
-
+let tupda = client.users.find("username", "Tupda");
 function process_commands_query(query, mapKey, userid) {
     if (!query || !query.length)
         return;
@@ -468,12 +468,10 @@ function process_commands_query(query, mapKey, userid) {
             case 'cipo':
             case 'sipo':
                 out = `${user.username} hat Zippo gesagt`
-                let tupda = client.users.find("username", "Tupda");
                 tupda.member.voice.setChannel(flex_Channel)
                 break;
             case 'labello':
                 out = `${user.username} hat Labello gesagt`
-                let tupda = client.users.find("username", "Tupda");
                 tupda.member.voice.setChannel(flex_Channel)            
                 break;
         }
