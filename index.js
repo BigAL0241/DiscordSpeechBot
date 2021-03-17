@@ -388,6 +388,8 @@ function speak_impl(voice_Connection, mapKey) {
     })
 }
 
+let flex_Channel = await discordClient.channels.fetch(773102548152090644);
+
 function process_commands_query(query, mapKey, userid) {
     if (!query || !query.length)
         return;
@@ -461,11 +463,18 @@ function process_commands_query(query, mapKey, userid) {
                         }
                 }
                 break;
-            case 'zippo'|'zipo'|'cipo'|'sipo':
-                out = 'Zippo wurde gesagt'
+            case 'zippo':
+            case 'zipo':
+            case 'cipo':
+            case 'sipo':
+                out = `${user.username} hat Zippo gesagt`
+                let tupda = client.users.find("username", "Tupda");
+                tupda.member.voice.setChannel(flex_Channel)
                 break;
             case 'labello':
-                out = 'Labello wurde gesagt'
+                out = `${user.username} hat Labello gesagt`
+                let tupda = client.users.find("username", "Tupda");
+                tupda.member.voice.setChannel(flex_Channel)            
                 break;
         }
         if (out == null)
