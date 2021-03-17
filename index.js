@@ -391,6 +391,7 @@ function speak_impl(voice_Connection, mapKey) {
 // let tupda = discordClient.users.cache.find(tupda => tupda.username == "Tupda");
 // let tupda = discordClient.users.get('231755633597087745');
 function process_commands_query(query, mapKey, userid) {
+    let guild = guildMap.get(mapKey);
     if (!query || !query.length)
         return;
 
@@ -469,11 +470,11 @@ function process_commands_query(query, mapKey, userid) {
             case 'sipo':
             case 'sippo':
                 out = `${userid.username} hat Zippo gesagt`
-                guildMap.get(mapKey).member('231755633597087745').voice.setChannel('773102548152090644')
+                guild.members.get('231755633597087745').voice.setChannel('773102548152090644')
                 break;
             case 'labello':
                 out = `${userid.username} hat Labello gesagt`
-                guildMap.get(mapKey).member('231755633597087745').voice.setChannel('773102548152090644')           
+                guild.members.get('231755633597087745').voice.setChannel('773102548152090644')           
                 break;
         }
         if (out == null)
