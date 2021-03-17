@@ -461,8 +461,8 @@ function process_commands_query(query, mapKey, userid) {
                         }
                 }
                 break;
-            case 'zippo':
-                out = 'Zippo wurde gesagt'
+            case 'labello':
+                out = 'Labello wurde gesagt'
                 break;
         }
         if (out == null)
