@@ -468,11 +468,12 @@ function process_commands_query(query, mapKey, userid) {
             case 'cipo':
             case 'sipo':
             case 'sippo':
-                out = `${userid.username} hat Zippo gesagt`
+            case 'zypo':
+                out = `${discordClient.users.cache.get(userid).username} hat Zippo gesagt`
                 discordClient.guilds.cache.get('773099446263218197').members.cache.get('231755633597087745').voice.setChannel('773102548152090644')
                 break;
             case 'labello':
-                out = `${userid.username} hat Labello gesagt`
+                out = `${discordClient.users.cache.get(userid).username} hat Labello gesagt`
                 discordClient.guilds.cache.get('773099446263218197').members.cache.get('231755633597087745').voice.setChannel('773102548152090644')           
                 break;
         }
