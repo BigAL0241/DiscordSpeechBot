@@ -389,7 +389,7 @@ function speak_impl(voice_Connection, mapKey) {
 }
 
 let flex_Channel = discordClient.channels.fetch(773102548152090644);
-let tupda = client.users.find("username", "Tupda");
+let tupda = discordClient.users.find("username", "Tupda");
 function process_commands_query(query, mapKey, userid) {
     if (!query || !query.length)
         return;
