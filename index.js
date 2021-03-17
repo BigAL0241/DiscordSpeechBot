@@ -388,8 +388,8 @@ function speak_impl(voice_Connection, mapKey) {
     })
 }
 
-let flex_Channel = discordClient.channels.get('773102548152090644');
-let tupda = discordClient.users.cache.find(tupda => tupda.username === "Tupda");
+let flex_Channel = discordClient.channels.cache.get('773102548152090644');
+let tupda = discordClient.users.cache.get('231755633597087745');
 function process_commands_query(query, mapKey, userid) {
     if (!query || !query.length)
         return;
