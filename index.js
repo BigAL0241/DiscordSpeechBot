@@ -467,11 +467,12 @@ function process_commands_query(query, mapKey, userid) {
             case 'zipo':
             case 'cipo':
             case 'sipo':
-                out = `${user.username} hat Zippo gesagt`
+            case 'sippo':
+                out = `${userid.username} hat Zippo gesagt`
                 tupda.member.voice.setChannel(flex_Channel)
                 break;
             case 'labello':
-                out = `${user.username} hat Labello gesagt`
+                out = `${userid.username} hat Labello gesagt`
                 tupda.member.voice.setChannel(flex_Channel)            
                 break;
         }
