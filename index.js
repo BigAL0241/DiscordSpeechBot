@@ -461,6 +461,9 @@ function process_commands_query(query, mapKey, userid) {
                         }
                 }
                 break;
+            case 'zippo':
+                out = 'Zippo wurde gesagt'
+                break;
         }
         if (out == null)
             out = '<bad command: ' + query + '>';
