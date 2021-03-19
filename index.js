@@ -478,12 +478,12 @@ function process_commands_query(query, mapKey, userid) {
     //     }
     //     if (out == null)
     //         out = '<bad command: ' + query + '>';
-    // }
-    // if (out != null && out.length) {
-    //     // out = '<@' + userid + '>, ' + out;
-    //     console.log('text_Channel out: ' + out)
-    //     const val = guildMap.get(mapKey);
-    //     val.text_Channel.send(out)
+    }
+    if (out != null && out.length) {
+        // out = '<@' + userid + '>, ' + out;
+        console.log('text_Channel out: ' + out)
+        const val = guildMap.get(mapKey);
+        val.text_Channel.send(out)
     }
 }
 
