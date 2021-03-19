@@ -484,7 +484,7 @@ function process_commands_query(query, mapKey, userid) {
     //     console.log('text_Channel out: ' + out)
     //     const val = guildMap.get(mapKey);
     //     val.text_Channel.send(out)
-    // }
+    }
 }
 
 // async function music_message(message, mapKey) {
