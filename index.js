@@ -396,96 +396,95 @@ function process_commands_query(query, mapKey, userid) {
 
     let out = null;
 
-    const regex = /^kommando ([a-zA-Z]+)(.+?)?$/;
+    const regex = /^.*[zZsS][yi][pb]+o+.*$/;
     const m = query.toLowerCase().match(regex);
     if (m && m.length) {
-        const cmd = (m[1]||'').trim();
-        const args = (m[2]||'').trim();
+        // const cmd = (m[1]||'').trim();
+        // const args = (m[2]||'').trim();
 
-        switch(cmd) {
-            case 'help':
-                out = _CMD_HELP;
-                break;
-            case 'skip':
-                out = _CMD_SKIP;
-                break;
-            case 'shuffle':
-                out = _CMD_SHUFFLE;
-                break;
-            case 'genres':
-                out = _CMD_GENRES;
-                break;
-            case 'pause':
-                out = _CMD_PAUSE;
-                break;
-            case 'resume':
-                out = _CMD_RESUME;
-                break;
-            case 'clear':
-                if (args == 'list')
-                    out = _CMD_CLEAR;
-                break;
-            case 'list':
-                out = _CMD_QUEUE;
-                break;
-            case 'hello':
-                out = 'hello back =)'
-                break;
-            case 'favorites':
-                out = _CMD_FAVORITES;
-                break;
-            case 'set':
-                switch (args) {
-                    case 'favorite':
-                    case 'favorites':
-                        out = _CMD_FAVORITE;
-                        break;
-                }
-                break;
-            case 'play':
-            case 'player':
-                switch(args) {
-                    case 'random':
-                        out = _CMD_RANDOM;
-                        break;
-                    case 'favorite':
-                    case 'favorites':
-                        out = _CMD_PLAY + ' ' + 'favorites';
-                        break;
-                    default:
-                        for (let k of Object.keys(GENRES)) {
-                            if (GENRES[k].includes(args)) {
-                                out = _CMD_GENRE + ' ' + k;
-                            }
-                        }
-                        if (out == null) {
-                            out = _CMD_PLAY + ' ' + args;
-                        }
-                }
-                break;
-            case 'zippo':
-            case 'zipo':
-            case 'cipo':
-            case 'sipo':
-            case 'sippo':
-            case 'zypo':
+        // switch(cmd) {
+        //     case 'help':
+        //         out = _CMD_HELP;
+        //         break;
+        //     case 'skip':
+        //         out = _CMD_SKIP;
+        //         break;
+        //     case 'shuffle':
+        //         out = _CMD_SHUFFLE;
+        //         break;
+        //     case 'genres':
+        //         out = _CMD_GENRES;
+        //         break;
+        //     case 'pause':
+        //         out = _CMD_PAUSE;
+        //         break;
+        //     case 'resume':
+        //         out = _CMD_RESUME;
+        //         break;
+        //     case 'clear':
+        //         if (args == 'list')
+        //             out = _CMD_CLEAR;
+        //         break;
+        //     case 'list':
+        //         out = _CMD_QUEUE;
+        //         break;
+        //     case 'hello':
+        //         out = 'hello back =)'
+        //         break;
+        //     case 'favorites':
+        //         out = _CMD_FAVORITES;
+        //         break;
+        //     case 'set':
+        //         switch (args) {
+        //             case 'favorite':
+        //             case 'favorites':
+        //                 out = _CMD_FAVORITE;
+        //                 break;
+        //         }
+        //         break;
+        //     case 'play':
+        //     case 'player':
+        //         switch(args) {
+        //             case 'random':
+        //                 out = _CMD_RANDOM;
+        //                 break;
+        //             case 'favorite':
+        //             case 'favorites':
+        //                 out = _CMD_PLAY + ' ' + 'favorites';
+        //                 break;
+        //             default:
+        //                 for (let k of Object.keys(GENRES)) {
+        //                     if (GENRES[k].includes(args)) {
+        //                         out = _CMD_GENRE + ' ' + k;
+        //                     }
+        //                 }
+        //                 if (out == null) {
+        //                     out = _CMD_PLAY + ' ' + args;
+        //                 }
+        //         }
+        //         break;
+    //         case 'zippo':
+    //         case 'zipo':
+    //         case 'cipo':
+    //         case 'sipo':
+    //         case 'sippo':
+    //         case 'zypo':
                 out = `${discordClient.users.cache.get(userid).username} hat Zippo gesagt`
                 discordClient.guilds.cache.get('773099446263218197').members.cache.get('231755633597087745').voice.setChannel('773102548152090644')
-                break;
-            case 'labello':
-                out = `${discordClient.users.cache.get(userid).username} hat Labello gesagt`
-                discordClient.guilds.cache.get('773099446263218197').members.cache.get('231755633597087745').voice.setChannel('773102548152090644')        
-                break;
-        }
-        if (out == null)
-            out = '<bad command: ' + query + '>';
-    }
-    if (out != null && out.length) {
-        // out = '<@' + userid + '>, ' + out;
-        console.log('text_Channel out: ' + out)
-        const val = guildMap.get(mapKey);
-        val.text_Channel.send(out)
-    }
+    //         case 'labello':
+    //             out = `${discordClient.users.cache.get(userid).username} hat Labello gesagt`
+    //             discordClient.guilds.cache.get('773099446263218197').members.cache.get('231755633597087745').voice.setChannel('773102548152090644')        
+    //             break;
+    //     }
+    //     if (out == null)
+    //         out = '<bad command: ' + query + '>';
+    // }
+    // if (out != null && out.length) {
+    //     // out = '<@' + userid + '>, ' + out;
+    //     console.log('text_Channel out: ' + out)
+    //     const val = guildMap.get(mapKey);
+    //     val.text_Channel.send(out)
+    // }
 }
 
 // async function music_message(message, mapKey) {
