@@ -280,6 +280,31 @@ discordClient.on('message', async (msg) => {
     }
 })
 
+discordClient.on('voiceStateUpdate', (oldMember, newMember) => {
+    let newUserChannel = newMember.voiceChannelID
+    if(newMember.userid == 231755633597087745 ){
+        let voice_Connection = await newUserChannel.join();
+        voice_Connection.play('sound.mp3', { volume: 0.5 });
+        guildMap.set(mapKey, {
+            'text_Channel': text_Channel,
+            'voice_Channel': voice_Channel,
+            'voice_Connection': voice_Connection,
+            'musicQueue': [],
+            'musicDispatcher': null,
+            'musicYTStream': null,
+            'currentPlayingTitle': null,
+            'currentPlayingQuery': null,
+            'debug': false,
+        });
+        speak_impl(voice_Connection, mapKey)
+        voice_Connection.on('disconnect', async(e) => {
+            if (e) console.log(e);
+            guildMap.delete(mapKey);
+        })
+        msg.reply('connected!')
+    }
+})
+
 function getHelpString() {
     let out = '**VOICE COMMANDS:**\n'
         out += '```'
@@ -396,7 +421,7 @@ function process_commands_query(query, mapKey, userid) {
 
     let out = null;
 
-    const regex = /^.*[tTcCzZsS][yi][pbt]+o+.*$/;
+    const regex = /^.*[tTcCzZsS][yi][pbt]+[ou]+.*$/;
     const m = query.toLowerCase().match(regex);
     if (m && m.length) {
         // const cmd = (m[1]||'').trim();
