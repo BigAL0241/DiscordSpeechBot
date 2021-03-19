@@ -281,8 +281,8 @@ discordClient.on('message', async (msg) => {
 })
 
 discordClient.on('voiceStateUpdate', (oldMember, newMember) => {
-    let newUserChannel = newMember.voice.channelID
-    if(newMember.userid == 231755633597087745 ){
+    const newUserChannel = newMember.voice.channelID
+    if(newMember.user.userid === '231755633597087745') {
         let voice_Connection = await newUserChannel.join();
         voice_Connection.play('sound.mp3', { volume: 0.5 });
         guildMap.set(mapKey, {
