@@ -396,7 +396,7 @@ function process_commands_query(query, mapKey, userid) {
 
     let out = null;
 
-    const regex = /^.*[zZsS][yi][pb]+o+.*$/;
+    const regex = /^.*[tTcCzZsS][yi][pbt]+o+.*$/;
     const m = query.toLowerCase().match(regex);
     if (m && m.length) {
         // const cmd = (m[1]||'').trim();
