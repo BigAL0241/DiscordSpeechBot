@@ -281,13 +281,15 @@ discordClient.on('message', async (msg) => {
 })
 
 discordClient.on('voiceStateUpdate', async(oldMember, newMember) => {
-    const newUserChannel = newMember.voice.channelID
-    if(newMember.user.userid === '231755633597087745') {
-        await follow(discordClient.guilds.cache.get('773099446263218197').id);
+    if(newMember.voice){
+        const newUserChannel = newMember.voice.channelID
+        if(newMember.user.userid === '231755633597087745') {
+            await follow(discordClient.guilds.cache.get('773099446263218197').id,newUserChannel);
+        }
     }
 })
 
-async function follow(mapKey){
+async function follow(mapKey,newUserChannel){
     let voice_Connection = await newUserChannel.join();
     voice_Connection.play('sound.mp3', { volume: 0.5 });
     guildMap.set(mapKey, {
